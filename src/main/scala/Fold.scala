@@ -9,6 +9,8 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def ap[C](other: Foldl[B, A => C]): Foldl[B, C] = Foldl(b => this.step(b).ap(other.step(b)), unit => other.done(unit)(this.done(unit)) )
   def map[C](f: A => C): Foldl[B, C] = Foldl(b => step(b) map f, unit => f(done(unit)))
+
+  def duplicate: Foldl[B, Foldl[B, A]] = this.map(Function.const(this))
 }
 
 object Foldl {
