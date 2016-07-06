@@ -23,7 +23,7 @@ lazy val foldSettings = Seq(
   scalacOptions ++= foldlScalacOptions,
   scalacOptions in Test ++= Seq("-Yrangepos"),
   licenses += ("Apache-2.0", url("http://opensource.org/licenses/Apache-2.0")),
-  libraryDependencies ++= Seq("specs2" %% "specs2" % "3.8.4" % "test", "org.scalacheck" %% "scalacheck" % "1.12.5" % "test")
+  libraryDependencies ++= Seq("org.scalacheck" %% "scalacheck" % "1.12.5" % "test")
 )
 
 lazy val root = (project in file(".")).
