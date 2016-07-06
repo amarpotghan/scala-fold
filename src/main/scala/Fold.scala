@@ -1,7 +1,10 @@
 package Foldl
 
+import scala.collection._
+import scala.math._
+
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
-  def foldl(xs: List[B]): A = (xs.foldLeft(this)((f : Foldl[B, A], b) => f.step(b))).extract
+  def foldl(xs: Traversable[B]): A = (xs.foldLeft(this)((f : Foldl[B, A], b) => f.step(b))).extract
   def extract: A = done(())
 
   def ap[C](other: Foldl[B, A => C]): Foldl[B, C] = Foldl(b => this.step(b).ap(other.step(b)), unit => other.done(unit)(this.done(unit)) )
