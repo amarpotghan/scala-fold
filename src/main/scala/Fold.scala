@@ -25,4 +25,20 @@ object Foldl extends FoldlFunctions {
   def apply[B, A](init: A)(istep: (A, B) => A): Foldl[B, A] = Foldl(istep.curried, init, (identity : A => A))
   def apply[B, A](s: B => Foldl[B, A], done: Unit => A): Foldl[B, A] = new Foldl(s, done)
 
- }
+  def pure[B, A](a: A): Foldl[B, A] = {
+    def con:Foldl[B, A] = Foldl(_ => con, unit => a)
+    con
+  }
+  // TODO: remove me after adding instances
+  def ap1[C, B, A](first: Foldl[B, A => C], second: Foldl[B, A]): Foldl[B, C] = second.ap(first)
+}
+
+trait FoldlFunctions {
+  def length[B, A](implicit a: Numeric[A]): Foldl[B, A]
+    = Foldl(a.zero)((x: A, _:B) => a.plus(x, a.one))
+
+  def sum[B](implicit a: Numeric[B]): Foldl[B, B]
+    = Foldl(a.zero)((x: A, y:A) => a.plus(x, y))
+
+
+}
