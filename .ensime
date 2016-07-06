@@ -1,0 +1,26 @@
+(
+ :root-dir "/Users/amarp/codebase/scala-foldl"
+ :cache-dir "/Users/amarp/codebase/scala-foldl/.ensime_cache"
+ :scala-compiler-jars ("/Users/amarp/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.11.8.jar" "/Users/amarp/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar" "/Users/amarp/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.8.jar" "/Users/amarp/.ivy2/cache/org.scala-lang/scalap/jars/scalap-2.11.8.jar")
+ :name "root"
+ :java-home "/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home"
+ :java-flags ("-Xss2m" "-Xms1024m" "-Xmx1024m" "-XX:ReservedCodeCacheSize=128m" "-XX:MaxMetaspaceSize=256m")
+ :java-compiler-args nil
+ :reference-source-roots ("/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip")
+ :scala-version "2.11.8"
+ :compiler-args ("-deprecation" "-encoding" "UTF-8" "-feature" "-unchecked" "-Xfatal-warnings" "-Xlint:-missing-interpolator,_" "-Yinline-warnings" "-Yno-adapted-args" "-Ywarn-dead-code" "-Ywarn-numeric-widen" "-Ywarn-value-discard" "-language:existentials" "-language:experimental.macros" "-language:implicitConversions" "-language:higherKinds" "-Xlint" "-Xfuture" "-Ywarn-unused-import" "-Ymacro-expand:discard")
+ :formatting-prefs nil
+ :disable-source-monitoring nil
+ :disable-class-monitoring nil
+ :subprojects ((
+   :name "root"
+   :source-roots ("/Users/amarp/codebase/scala-foldl/src/main/scala")
+   :targets ("/Users/amarp/codebase/scala-foldl/target/scala-2.11/classes")
+   :test-targets ("/Users/amarp/codebase/scala-foldl/target/scala-2.11/test-classes")
+   :depends-on-modules nil
+   :compile-deps ("/Users/amarp/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar")
+   :runtime-deps nil
+   :test-deps ("/Users/amarp/.ivy2/cache/org.scalacheck/scalacheck_2.11/jars/scalacheck_2.11-1.12.5.jar" "/Users/amarp/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar")
+   :doc-jars ("/Users/amarp/codebase/scala-foldl/target/scala-2.11/applicative-folds_2.11-0.0.1-javadoc.jar" "/Users/amarp/.ivy2/cache/org.scala-lang/scala-library/docs/scala-library-2.11.8-javadoc.jar" "/Users/amarp/.ivy2/cache/org.scalacheck/scalacheck_2.11/docs/scalacheck_2.11-1.12.5-javadoc.jar" "/Users/amarp/.ivy2/cache/org.scala-sbt/test-interface/docs/test-interface-1.0-javadoc.jar")
+   :reference-source-roots ("/Users/amarp/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.11.8-sources.jar" "/Users/amarp/.ivy2/cache/org.scalacheck/scalacheck_2.11/srcs/scalacheck_2.11-1.12.5-sources.jar" "/Users/amarp/.ivy2/cache/org.scala-sbt/test-interface/srcs/test-interface-1.0-sources.jar")))
+)
