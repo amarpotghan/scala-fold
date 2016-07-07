@@ -70,13 +70,16 @@ trait FoldlFunctions {
   def head[A]: Foldl[A, Option[A]]
     = Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
 
-  def and[A](p: A => Boolean): Foldl[A, Boolean]
+  def any[A](p: A => Boolean): Foldl[A, Boolean]
     = Foldl(true)((acc: Boolean, e: A) => acc && p(e))
 
-  def or[A](p: A => Boolean): Foldl[A, Boolean]
+  def all[A](p: A => Boolean): Foldl[A, Boolean]
     = Foldl(false)((acc: Boolean, e: A) => acc || p(e))
 
-  def all[A](p: A => Boolean): Foldl[A, Boolean]
-    = ???
+  def and[A]: Foldl[Boolean, Boolean]
+    = Foldl(true)(_ && _)
+
+  def or[A]: Foldl[Boolean, Boolean]
+    = Foldl(false)(_ || _)
 
 }
