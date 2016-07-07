@@ -12,6 +12,8 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def duplicate: Foldl[B, Foldl[B, A]] = this.map(Function.const(this))
 
+  def dimap[C, D](f: C => B, g: A => D): Foldl[C, D] = Foldl[C, D]((c: C) => step(f(c)).dimap(f, g), g compose done)
+
 }
 
 object Foldl extends FoldlFunctions {
@@ -48,4 +50,5 @@ trait FoldlFunctions {
   def and[A](p: A => Boolean): Foldl[A, Boolean] = Foldl(true)((acc: Boolean, e: A) => acc && p(e))
 
   def or[A](p: A => Boolean): Foldl[A, Boolean] = Foldl(false)((acc: Boolean, e: A) => acc || p(e))
+
 }
