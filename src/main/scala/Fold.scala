@@ -58,11 +58,17 @@ object Foldl extends FoldlFunctions {
 }
 
 trait FoldlFunctions {
+  def helperFold[A](f: (A, A) => A): Foldl[A, Option[A]]
+    = Foldl[A, Option[A]](None)((acc: Option[A], a: A) => acc.map(x => f(x, a)).orElse(Some(a)))
+
   def length[B, A](implicit a: Numeric[A]): Foldl[B, A]
     = Foldl(a.zero)((x: A, _:B) => a.plus(x, a.one))
 
   def sum[B](implicit a: Numeric[B]): Foldl[B, B]
     = Foldl(a.zero)((x: B, y:B) => a.plus(x, y))
+
+  def product[B](implicit a: Numeric[B]): Foldl[B, B]
+    = Foldl(a.one)((x: B, y:B) => a.times(x, y))
 
   def isEmpty[B]: Foldl[B, Boolean]
     = Foldl(true)((_: Boolean, _:B) => false)
