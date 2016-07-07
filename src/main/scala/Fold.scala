@@ -1,10 +1,15 @@
 package fold
 
 import scala.collection._
-import scala.math._
+import scala.math.{Ordering => DefaultOrdering}
+import scalaz._
 
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
+  def foldl[F[_]](xs: F[B])(implicit foldable: Foldable[F]): A =
+    (foldable.foldLeft(xs, this)((f: Foldl[B, A], b) => f.step(b))).extract
+
+  // TODO: Remove me
   def foldl(xs: Traversable[B]): A =
     (xs.foldLeft(this)((f: Foldl[B, A], b) => f.step(b))).extract
 
@@ -84,9 +89,9 @@ trait FoldlFunctions {
 
   def or[A]: Foldl[Boolean, Boolean] = Foldl(false)(_ || _)
 
-  def maximum[A](implicit ord: Ordering[A]): Foldl[A, Option[A]] = helperFold(ord.max _)
+  def maximum[A](implicit ord: DefaultOrdering[A]): Foldl[A, Option[A]] = helperFold(ord.max _)
 
-  def minimum[A](implicit ord: Ordering[A]): Foldl[A, Option[A]] = helperFold(ord.min _)
+  def minimum[A](implicit ord: DefaultOrdering[A]): Foldl[A, Option[A]] = helperFold(ord.min _)
 
   def last[A]: Foldl[A, Option[A]] = helperFold((_: A, y: A) => y)
 
