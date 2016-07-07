@@ -88,4 +88,9 @@ trait FoldlFunctions {
   def or[A]: Foldl[Boolean, Boolean]
     = Foldl(false)(_ || _)
 
+  def maximum[A](implicit ord: Ordering[A]): Foldl[A, Option[A]]
+    = helperFold(ord.max _)
+
+  def minimum[A](implicit ord: Ordering[A]): Foldl[A, Option[A]]
+    = helperFold(ord.min _)
 }
