@@ -6,8 +6,8 @@ import scalaz._
 
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
-  def foldl[F[_]](xs: F[B])(implicit foldable: Foldable[F]): A =
-    (foldable.foldLeft(xs, this)((f: Foldl[B, A], b) => f.step(b))).extract
+  def foldl[F[_]: Foldable](xs: F[B]): A =
+    (implicitly[Foldable[F]].foldLeft(xs, this)((f: Foldl[B, A], b) => f.step(b))).extract
 
   // TODO: Remove me
   def foldl(xs: Traversable[B]): A =
@@ -89,9 +89,9 @@ trait FoldlFunctions {
 
   def or[A]: Foldl[Boolean, Boolean] = Foldl(false)(_ || _)
 
-  def maximum[A](implicit ord: DefaultOrdering[A]): Foldl[A, Option[A]] = helperFold(ord.max _)
+  def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] = helperFold(implicitly[DefaultOrdering[A]].max _)
 
-  def minimum[A](implicit ord: DefaultOrdering[A]): Foldl[A, Option[A]] = helperFold(ord.min _)
+  def minimum[A: DefaultOrdering]: Foldl[A, Option[A]] = helperFold(implicitly[DefaultOrdering[A]].min _)
 
   def last[A]: Foldl[A, Option[A]] = helperFold((_: A, y: A) => y)
 
