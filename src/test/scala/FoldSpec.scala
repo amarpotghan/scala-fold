@@ -28,6 +28,15 @@ class FoldSpecs extends Specification {
             $anySpec6
             $anySpec7
 
+            $orSpec1
+            $orSpec2
+            $orSpec3
+
+            $andSpec1
+            $andSpec2
+            $andSpec3
+
+
             $headSpec1
             $headSpec2
          """
@@ -54,6 +63,16 @@ class FoldSpecs extends Specification {
   def anySpec5 = Foldl.any((x: Int) => x % 2 == 0).foldl(Seq(1, 1, 3)) must_== false
   def anySpec6 = Foldl.any((x: Int) => x % 2 == 0).foldl(Seq()) must_== false
   def anySpec7 = Foldl.any(Function.const(true)).foldl(Seq()) must_== false
+
+
+  def orSpec1 = Foldl.or.foldl(Seq(true, true, false)) must_== true
+  def orSpec2 = Foldl.or.foldl(Seq(false, false)) must_== false
+  def orSpec3 = Foldl.or.foldl(Seq[Boolean]()) must_== false
+
+
+  def andSpec1 = Foldl.and.foldl(Seq(true, true, false)) must_== false
+  def andSpec2 = Foldl.and.foldl(Seq(true, true)) must_== true
+  def andSpec3 = Foldl.and.foldl(Seq[Boolean]()) must_== true
 
   def headSpec1 = Foldl.head.foldl(Seq[String]("1", "2")) must_== Some("1")
   def headSpec2 = Foldl.head.foldl(Seq[String]()) must_== None
