@@ -42,4 +42,9 @@ trait FoldlFunctions {
 
   def isEmpty[B]: Foldl[B, Boolean] = Foldl(true)((_: Boolean, _:B) => false)
 
+  def and: Foldl[Boolean, Boolean] = Foldl(true)(_ && _)
+
+  def or: Foldl[Boolean, Boolean] = Foldl(false)(_ || _)
+
+
 }
