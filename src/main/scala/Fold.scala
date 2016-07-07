@@ -6,7 +6,7 @@ import scala.math._
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def foldl(xs: Traversable[B]): A
-    = (xs.foldLeft(this)((f : Foldl[B, A], b) => f.step(b))).extract
+    = (xs.foldLeft(this)((f: Foldl[B, A], b) => f.step(b))).extract
 
   def extract: A = done(())
 
@@ -36,7 +36,7 @@ object Foldl extends FoldlFunctions {
   }
 
   def apply[B, A](istep: A => B => A, init: A): Foldl[B, A]
-    = Foldl(istep, init, (identity : A => A))
+    = Foldl(istep, init, (identity: A => A))
 
   def apply[S, B, A](istep: (S, B) => S, init: S, done: S => A): Foldl[B, A]
     = Foldl(istep.curried, init, done)
@@ -48,7 +48,7 @@ object Foldl extends FoldlFunctions {
     = new Foldl(s, done)
 
   def pure[B, A](a: A): Foldl[B, A] = {
-    def con:Foldl[B, A] = Foldl(_ => con, unit => a)
+    def con: Foldl[B, A] = Foldl(_ => con, unit => a)
     con
   }
 
@@ -62,16 +62,16 @@ trait FoldlFunctions {
     = Foldl[A, Option[A]](None)((acc: Option[A], a: A) => acc.map(x => f(x, a)).orElse(Some(a)))
 
   def length[B, A](implicit a: Numeric[A]): Foldl[B, A]
-    = Foldl(a.zero)((x: A, _:B) => a.plus(x, a.one))
+    = Foldl(a.zero)((x: A, _: B) => a.plus(x, a.one))
 
   def sum[B](implicit a: Numeric[B]): Foldl[B, B]
-    = Foldl(a.zero)((x: B, y:B) => a.plus(x, y))
+    = Foldl(a.zero)((x: B, y: B) => a.plus(x, y))
 
   def product[B](implicit a: Numeric[B]): Foldl[B, B]
-    = Foldl(a.one)((x: B, y:B) => a.times(x, y))
+    = Foldl(a.one)((x: B, y: B) => a.times(x, y))
 
   def isEmpty[B]: Foldl[B, Boolean]
-    = Foldl(true)((_: Boolean, _:B) => false)
+    = Foldl(true)((_: Boolean, _: B) => false)
 
   def head[A]: Foldl[A, Option[A]]
     = Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
@@ -95,7 +95,7 @@ trait FoldlFunctions {
     = helperFold(ord.min _)
 
   def last[A]: Foldl[A, Option[A]]
-    = helperFold((_:A, y:A) => y)
+    = helperFold((_: A, y: A) => y)
 
   def lastOrElse[A](a: A): Foldl[A, A]
     = Foldl(a)((_: A, e: A) => e)
