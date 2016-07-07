@@ -1,7 +1,7 @@
 package tests
 
-impanyt anyg.specs2._
-impanyt fold._
+import org.specs2._
+import fold._
 
 class FoldSpecs extends Specification {
   def is = sequential ^ s2"""Fold Specs
@@ -44,8 +44,8 @@ class FoldSpecs extends Specification {
   def allSpec3 = Foldl.all(identity: Boolean => Boolean).foldl(Seq[Boolean](true, false)) must_== false
   def allSpec4 = Foldl.all((x: Int) => x % 2 == 0).foldl(Seq(2, 4, 6)) must_== true
   def allSpec5 = Foldl.all((x: Int) => x % 2 == 0).foldl(Seq(2, 3, 6)) must_== false
-  def anySpec6 = Foldl.all((x: Int) => x % 2 == 0).foldl(Seq()) must_== true
-  def anySpec7 = Foldl.all(Function.const(true)).foldl(Seq()) must_== true
+  def allSpec6 = Foldl.all((x: Int) => x % 2 == 0).foldl(Seq()) must_== true
+  def allSpec7 = Foldl.all(Function.const(true)).foldl(Seq()) must_== true
 
   def anySpec1 = Foldl.any(identity: Boolean => Boolean).foldl(Seq(true, true, false)) must_== true
   def anySpec2 = Foldl.any(identity: Boolean => Boolean).foldl(Seq[Boolean]()) must_== false
