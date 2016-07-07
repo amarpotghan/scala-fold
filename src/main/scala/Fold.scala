@@ -38,7 +38,8 @@ trait FoldlFunctions {
     = Foldl(a.zero)((x: A, _:B) => a.plus(x, a.one))
 
   def sum[B](implicit a: Numeric[B]): Foldl[B, B]
-    = Foldl(a.zero)((x: A, y:A) => a.plus(x, y))
+    = Foldl(a.zero)((x: B, y:B) => a.plus(x, y))
 
+  def isEmpty[B]: Foldl[B, Boolean] = Foldl(true)((_: Boolean, _:B) => false)
 
 }
