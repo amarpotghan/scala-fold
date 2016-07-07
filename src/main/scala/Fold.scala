@@ -1,4 +1,4 @@
-package Foldl
+package fold
 
 import scala.collection._
 import scala.math._
