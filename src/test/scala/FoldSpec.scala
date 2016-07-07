@@ -1,6 +1,7 @@
 package tests
 
 import org.specs2._
+import java.util._
 import fold._
 
 class FoldSpecs extends Specification {
@@ -40,6 +41,9 @@ class FoldSpecs extends Specification {
 
             $headSpec1
             $headSpec2
+
+            $lastSpec
+            $lastOrElseSpec
          """
 
   def lengthSpec = Foldl.length[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -48,7 +52,7 @@ class FoldSpecs extends Specification {
   def isEmptySpec2 = Foldl.isEmpty[String].foldl(Seq[String](""))  must_== false
 
   def sumSpec = Foldl.sum[Int].foldl(Seq(1, 1, 1)) must_== 3
-  def productSpec = Foldl.sum[Int].foldl(Seq(3, 3, 3)) must_== 27
+  def productSpec = Foldl.product[Int].foldl(Seq(3, 3, 3)) must_== 27
 
   def allSpec1 = Foldl.all(identity: Boolean => Boolean).foldl(Seq(true, true, true)) must_== true
   def allSpec2 = Foldl.all(identity: Boolean => Boolean).foldl(Seq[Boolean]()) must_== true
@@ -79,5 +83,7 @@ class FoldSpecs extends Specification {
   def headSpec1 = Foldl.head.foldl(Seq[String]("1", "2")) must_== Some("1")
   def headSpec2 = Foldl.head.foldl(Seq[String]()) must_== None
 
+  def lastSpec = Foldl.last.foldl(Seq(1, 2, 3)) must_== Some(3)
+  def lastOrElseSpec = Foldl.lastOrElse(0).foldl(Seq[Int]()) must_== 0
 
 }

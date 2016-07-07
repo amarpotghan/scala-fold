@@ -93,4 +93,11 @@ trait FoldlFunctions {
 
   def minimum[A](implicit ord: Ordering[A]): Foldl[A, Option[A]]
     = helperFold(ord.min _)
+
+  def last[A]: Foldl[A, Option[A]]
+    = helperFold((_:A, y:A) => y)
+
+  def lastOrElse[A](a: A): Foldl[A, A]
+    = Foldl(a)((_: A, e: A) => e)
+
 }
