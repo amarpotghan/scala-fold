@@ -14,6 +14,9 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def dimap[C, D](f: C => B, g: A => D): Foldl[C, D] = Foldl[C, D]((c: C) => step(f(c)).dimap(f, g), g compose done)
 
+  def lmap[C](f: C => B): Foldl[C, A] = dimap(f, identity)
+  def rmap[D](g: A => D): Foldl[B, D] = dimap(identity, g)
+
 }
 
 object Foldl extends FoldlFunctions {
