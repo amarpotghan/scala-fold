@@ -11,6 +11,7 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
   def map[C](f: A => C): Foldl[B, C] = Foldl(b => step(b) map f, unit => f(done(unit)))
 
   def duplicate: Foldl[B, Foldl[B, A]] = this.map(Function.const(this))
+
 }
 
 object Foldl extends FoldlFunctions {
@@ -46,5 +47,6 @@ trait FoldlFunctions {
 
   def or: Foldl[Boolean, Boolean] = Foldl(false)(_ || _)
 
+  def head[A]: Foldl[A, Option[A]] = Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
 
 }
