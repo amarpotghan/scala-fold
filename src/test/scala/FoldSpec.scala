@@ -11,6 +11,7 @@ class FoldSpecs extends Specification {
             $isEmptySpec2
 
             $sumSpec
+            $productSpec
 
             $allSpec1
             $allSpec2
@@ -47,6 +48,7 @@ class FoldSpecs extends Specification {
   def isEmptySpec2 = Foldl.isEmpty[String].foldl(Seq[String](""))  must_== false
 
   def sumSpec = Foldl.sum[Int].foldl(Seq(1, 1, 1)) must_== 3
+  def productSpec = Foldl.sum[Int].foldl(Seq(3, 3, 3)) must_== 27
 
   def allSpec1 = Foldl.all(identity: Boolean => Boolean).foldl(Seq(true, true, true)) must_== true
   def allSpec2 = Foldl.all(identity: Boolean => Boolean).foldl(Seq[Boolean]()) must_== true
