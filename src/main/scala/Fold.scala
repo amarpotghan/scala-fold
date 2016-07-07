@@ -43,10 +43,9 @@ trait FoldlFunctions {
 
   def isEmpty[B]: Foldl[B, Boolean] = Foldl(true)((_: Boolean, _:B) => false)
 
-  def and: Foldl[Boolean, Boolean] = Foldl(true)(_ && _)
-
-  def or: Foldl[Boolean, Boolean] = Foldl(false)(_ || _)
-
   def head[A]: Foldl[A, Option[A]] = Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
 
+  def and[A](p: A => Boolean): Foldl[A, Boolean] = Foldl(true)((acc: Boolean, e: A) => acc && p(e))
+
+  def or[A](p: A => Boolean): Foldl[A, Boolean] = Foldl(false)((acc: Boolean, e: A) => acc || p(e))
 }

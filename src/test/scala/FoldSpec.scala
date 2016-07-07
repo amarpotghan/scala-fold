@@ -31,13 +31,13 @@ class FoldSpecs extends Specification {
 
   def sumSpec = Foldl.sum[Int].foldl(Seq(1, 1, 1)) must_== 3
 
-  def andSpec1 = Foldl.and.foldl(Seq(true, true, true)) must_== true
-  def andSpec2 = Foldl.and.foldl(Seq[Boolean]()) must_== true
-  def andSpec3 = Foldl.and.foldl(Seq[Boolean](true, false)) must_== false
+  def andSpec1 = Foldl.and(identity: Boolean => Boolean).foldl(Seq(true, true, true)) must_== true
+  def andSpec2 = Foldl.and(identity: Boolean => Boolean).foldl(Seq[Boolean]()) must_== true
+  def andSpec3 = Foldl.and(identity: Boolean => Boolean).foldl(Seq[Boolean](true, false)) must_== false
 
-  def orSpec1 = Foldl.or.foldl(Seq(true, true, false)) must_== true
-  def orSpec2 = Foldl.or.foldl(Seq[Boolean]()) must_== false
-  def orSpec3 = Foldl.or.foldl(Seq[Boolean](false, false)) must_== false
+  def orSpec1 = Foldl.or(identity: Boolean => Boolean).foldl(Seq(true, true, false)) must_== true
+  def orSpec2 = Foldl.or(identity: Boolean => Boolean).foldl(Seq[Boolean]()) must_== false
+  def orSpec3 = Foldl.or(identity: Boolean => Boolean).foldl(Seq[Boolean](false, false)) must_== false
 
   def headSpec1 = Foldl.head.foldl(Seq[String]("1", "2")) must_== Some("1")
   def headSpec2 = Foldl.head.foldl(Seq[String]()) must_== None
