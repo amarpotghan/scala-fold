@@ -1,6 +1,5 @@
 package fold
 
-import scala.collection._
 import scala.math.{Ordering => DefaultOrdering}
 import scalaz._
 
@@ -31,7 +30,7 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
 }
 
-object Foldl extends FoldlFunctions {
+object Foldl extends FoldlFunctions with FoldlInstances {
 
   def apply[S, B, A](istep: S => B => S, init: S, done: S => A): Foldl[B, A] = {
     def construct(init1: S): Foldl[B, A] = new Foldl(b => construct(istep(init1)(b)), (x => done(init1)))
@@ -97,4 +96,29 @@ trait FoldlFunctions {
 
   def lastOrElse[A](a: A): Foldl[A, A] = Foldl(a)((_: A, e: A) => e)
 
+}
+
+trait FoldlInstances {
+
+  implicit def FoldFunctorApplyApplicative[B]:
+      Applicative[({type f[a] = Foldl[B, a]})#f] with
+      Apply[({type f[a] = Foldl[B, a]})#f] with
+      Functor[({type f[a] = Foldl[B, a]})#f] =
+
+  new Applicative[({type f[a] = Foldl[B, a]})#f] with
+      Apply[({type f[a] = Foldl[B, a]})#f] with
+      Functor[({type f[a] = Foldl[B, a]})#f] {
+
+    override def map[A, C](a: Foldl[B, A])(f: A => C) = a map f
+
+    def ap[A, C](a: => Foldl[B, A])(f: => Foldl[B, A => C]): Foldl[B, C] = a ap f
+
+    def point[A](a: => A): Foldl[B, A] = Foldl.pure(a)
+  }
+
+  implicit def FoldlMonoid[B, A: Monoid]: Monoid[Foldl[B, A]] =
+    new Monoid[Foldl[B, A]]{
+      def zero = Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
+      def append(a: Foldl[B, A], b: => Foldl[B, A]) = Applicative[({type f[a] = Foldl[B, a]})#f].apply2(a, b)(implicitly[Monoid[A]].append(_, _))
+    }
 }
