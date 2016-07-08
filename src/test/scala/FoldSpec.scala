@@ -46,6 +46,7 @@ class FoldSpecs extends Specification {
             $lastOrElseSpec
 
             $reverseSpec
+            $dedupSpec
          """
 
   def lengthSpec = Foldl.length[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -89,5 +90,7 @@ class FoldSpecs extends Specification {
   def lastOrElseSpec = Foldl.lastOrElse(0).foldl(Seq[Int]()) must_== 0
 
   def reverseSpec = Foldl.reverse.foldl(List[Int](1, 2, 3)) must_== List(3, 2 , 1)
+
+  def dedupSpec = Foldl.dedup.foldl(Seq[Int](1, 2, 3, 3)) must_== List(1, 2, 3)
 
 }
