@@ -62,11 +62,11 @@ trait FoldlFunctions {
   def length[B, A](implicit a: Numeric[A]): Foldl[B, A] =
     Foldl(a.zero)((x: A, _: B) => a.plus(x, a.one))
 
-  def sum[B](implicit a: Numeric[B]): Foldl[B, B] =
-    Foldl(a.zero)((x: B, y: B) => a.plus(x, y))
+  def sum[B](implicit N: Numeric[B]): Foldl[B, B] =
+    Foldl(N.zero)((x: B, y: B) => N.plus(x, y))
 
-  def product[B](implicit a: Numeric[B]): Foldl[B, B] =
-    Foldl(a.one)((x: B, y: B) => a.times(x, y))
+  def product[B](implicit N: Numeric[B]): Foldl[B, B] =
+    Foldl(N.one)((x: B, y: B) => N.times(x, y))
 
   def isEmpty[B]: Foldl[B, Boolean] =
     Foldl(true)((_: Boolean, _: B) => false)
