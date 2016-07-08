@@ -53,10 +53,6 @@ object Foldl extends FoldlFunctions with FoldlInstances {
     def con: Foldl[B, A] = Foldl(_ => con, unit => a)
     con
   }
-
-  // TODO: remove me after adding instances
-  def ap1[C, B, A](first: Foldl[B, A => C], second: Foldl[B, A]): Foldl[B, C] =
-    second.ap(first)
 }
 
 trait FoldlFunctions {
