@@ -92,6 +92,8 @@ trait FoldlFunctions {
 
   def lastOrElse[A](a: A): Foldl[A, A] = Foldl(a)((_: A, e: A) => e)
 
+  def reverse[A]: Foldl[A, List[A]] = Foldl(Nil: List[A])((x: List[A], y:A) => y :: x)
+
 }
 
 trait FoldlInstances {

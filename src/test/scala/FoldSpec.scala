@@ -1,8 +1,8 @@
 package tests
 
 import org.specs2._
-import java.util._
 import fold._
+import scala.collection._
 
 class FoldSpecs extends Specification {
   def is = sequential ^ s2"""Fold Specs
@@ -44,6 +44,8 @@ class FoldSpecs extends Specification {
 
             $lastSpec
             $lastOrElseSpec
+
+            $reverseSpec
          """
 
   def lengthSpec = Foldl.length[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -85,5 +87,7 @@ class FoldSpecs extends Specification {
 
   def lastSpec = Foldl.last.foldl(Seq(1, 2, 3)) must_== Some(3)
   def lastOrElseSpec = Foldl.lastOrElse(0).foldl(Seq[Int]()) must_== 0
+
+  def reverseSpec = Foldl.reverse.foldl(List[Int](1, 2, 3)) must_== List(3, 2 , 1)
 
 }
