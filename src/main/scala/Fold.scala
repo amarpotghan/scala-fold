@@ -96,12 +96,10 @@ trait FoldlFunctions {
 
   def dedup[A]: Foldl[A, List[A]] = {
     val es = Set[A]()
-    Foldl((es, identity: List[A] => List[A]))((tup: (Set[A], List[A] => List[A]), y:A) => tup match{
-                                                case (set: Set[A], f: (List[A] => List[A])) => if(set.contains(y)) (set, f) else (set + y, f compose (y :: _))
-                                              }) map {
-      case (_, f: (List[A] => List[A])) => f(List())
-    }
-
+    Foldl((es, identity: List[A] => List[A]))(
+      (tup: (Set[A], List[A] => List[A]), y:A) => tup match {
+        case (set: Set[A], f: (List[A] => List[A])) => if(set.contains(y)) (set, f) else (set + y, f compose (y :: _))
+      }) map { case (_, f: (List[A] => List[A])) => f(List()) }
   }
 
 }
