@@ -112,6 +112,11 @@ trait FoldlInstances {
     def point[A](a: => A): Foldl[B, A] = Foldl.pure(a)
   }
 
+  implicit def FoldProfunctor: Profunctor[Foldl] =
+    new Profunctor[Foldl] {
+      override def mapfst[B, A, C](fab: fold.Foldl[B, A])(f: C => B): fold.Foldl[C, A] = fab lmap f
+      override def mapsnd[B, A, C](fab: fold.Foldl[B, A])(f: A => C): fold.Foldl[B, C] = fab rmap f
+    }
   implicit def FoldlMonoid[B, A: Monoid]: Monoid[Foldl[B, A]] =
     new Monoid[Foldl[B, A]]{
       def zero = Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
