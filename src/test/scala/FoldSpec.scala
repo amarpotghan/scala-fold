@@ -42,6 +42,9 @@ class FoldSpecs extends Specification {
             $headSpec1
             $headSpec2
 
+            $headOrElseSpec1
+            $headOrElseSpec2
+
             $lastSpec
             $lastOrElseSpec
 
@@ -85,6 +88,9 @@ class FoldSpecs extends Specification {
 
   def headSpec1 = Foldl.head.foldl(Seq[String]("1", "2")) must_== Some("1")
   def headSpec2 = Foldl.head.foldl(Seq[String]()) must_== None
+
+  def headOrElseSpec1 = Foldl.headOrElse("head").foldl(Seq[String]()) must_== "head"
+  def headOrElseSpec2 = Foldl.headOrElse("head").foldl(Seq[String]("actualHead", "somethingElse")) must_== "actualHead"
 
   def lastSpec = Foldl.last.foldl(Seq(1, 2, 3)) must_== Some(3)
   def lastOrElseSpec = Foldl.lastOrElse(0).foldl(Seq[Int]()) must_== 0

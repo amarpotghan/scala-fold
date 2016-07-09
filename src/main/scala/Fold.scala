@@ -49,6 +49,7 @@ object Foldl extends FoldlFunctions with FoldlInstances {
   def apply[B, A](s: B => Foldl[B, A], done: Unit => A): Foldl[B, A] =
     new Foldl(s, done)
 
+  // TODO: Shall it be an another apply?
   def pure[B, A](a: A): Foldl[B, A] = {
     def con: Foldl[B, A] = Foldl(_ => con, unit => a)
     con
@@ -73,6 +74,9 @@ trait FoldlFunctions {
 
   def head[A]: Foldl[A, Option[A]] =
     Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
+
+  def headOrElse[A](a: A): Foldl[A, A] =
+    Foldl[A, A](a)((acc: A, _: A) => acc)
 
   def any[A](p: A => Boolean): Foldl[A, Boolean] =
     Foldl(false)((acc: Boolean, e: A) => acc || p(e))
