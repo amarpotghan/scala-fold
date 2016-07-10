@@ -19,6 +19,8 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def map[C](f: A => C): Foldl[B, C] = Foldl((b: B) => step(b) map f, f compose done)
 
+  def map2[C, D](other: Foldl[B, C])(f: (A, C) => D): Foldl[B, D] = other.ap(map(f.curried))
+
   def duplicate: Foldl[B, Foldl[B, A]] = this.map(Function.const(this))
 
   def dimap[C, D](f: C => B, g: A => D): Foldl[C, D] =
@@ -135,5 +137,12 @@ trait FoldlInstances {
     new Monoid[Foldl[B, A]]{
       def zero = Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
       def append(a: Foldl[B, A], b: => Foldl[B, A]) = Applicative[({type f[a] = Foldl[B, a]})#f].apply2(a, b)(implicitly[Monoid[A]].append(_, _))
+    }
+
+  implicit def FoldComonad[B]: Comonad[({type f[a] = Foldl[B, a]})#f] =
+    new Comonad[({type f[a] = Foldl[B, a]})#f] {
+      def cobind[A, C](fa: Foldl[B,A])(f: Foldl[B,A] => C): fold.Foldl[B, C] = Foldl((b: B) => fa.step(b).duplicate, (unit: Unit) => fa).map(f)
+      def copoint[A](p: fold.Foldl[B,A]): A = p.extract
+      def map[A, C](fa: fold.Foldl[B,A])(f: A => C): fold.Foldl[B,C] = fa map f
     }
 }
