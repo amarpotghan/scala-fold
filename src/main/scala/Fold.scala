@@ -1,16 +1,13 @@
 package fold
 
+import canfold._
 import scala.math.{Ordering => DefaultOrdering}
 import scalaz._
 
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
-  def foldl[F[_]: Foldable](xs: F[B]): A =
-    (implicitly[Foldable[F]].foldLeft(xs, this)((f: Foldl[B, A], b) => f.step(b))).extract
-
-  // TODO: Remove me
-  def foldl(xs: Traversable[B]): A =
-    (xs.foldLeft(this)((f: Foldl[B, A], b) => f.step(b))).extract
+  def foldl[G[_]](xs: G[B])(implicit Can: CanFold[G, B]): A =
+    Can.fold(xs)(this)
 
   def extract: A = done(())
 
@@ -77,9 +74,6 @@ trait FoldlFunctions {
   def head[A]: Foldl[A, Option[A]] =
     Foldl[A, Option[A]](None)((acc: Option[A], e: A) => acc orElse Some(e))
 
-  def headOrElse[A](a: A): Foldl[A, A] =
-    Foldl[A, A](a)((acc: A, _: A) => acc)
-
   def any[A](p: A => Boolean): Foldl[A, Boolean] =
     Foldl(false)((acc: Boolean, e: A) => acc || p(e))
 
@@ -114,7 +108,6 @@ trait FoldlInstances {
 
   implicit def FoldFunctorApplyApplicative[B]:
       Applicative[({type f[a] = Foldl[B, a]})#f] with
-      Apply[({type f[a] = Foldl[B, a]})#f] with
       Functor[({type f[a] = Foldl[B, a]})#f] =
 
   new Applicative[({type f[a] = Foldl[B, a]})#f] with
