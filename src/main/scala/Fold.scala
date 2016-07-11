@@ -106,36 +106,81 @@ trait FoldlFunctions {
 
 trait FoldlInstances {
 
-  implicit def FoldFunctorApplyApplicative[B]:
-      Applicative[({type f[a] = Foldl[B, a]})#f] with
-      Functor[({type f[a] = Foldl[B, a]})#f] =
+  implicit def FoldNumber[B, A: Numeric]: Numeric[Foldl[B, A]] =
+    new Numeric[Foldl[B, A]] {
+      def fromInt(x: Int): fold.Foldl[B,A] =
+        Foldl.pure(implicitly[Numeric[A]].fromInt(x))
 
-  new Applicative[({type f[a] = Foldl[B, a]})#f] with
-      Apply[({type f[a] = Foldl[B, a]})#f] with
-      Functor[({type f[a] = Foldl[B, a]})#f] {
+      def minus(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+        x.map2(y)(implicitly[Numeric[A]].minus)
 
-    override def map[A, C](a: Foldl[B, A])(f: A => C) = a map f
+      def negate(x: fold.Foldl[B,A]): fold.Foldl[B,A] =
+        x.map(implicitly[Numeric[A]].negate)
 
-    def ap[A, C](a: => Foldl[B, A])(f: => Foldl[B, A => C]): Foldl[B, C] = a ap f
+      def plus(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+        x.map2(y)(implicitly[Numeric[A]].plus)
 
-    def point[A](a: => A): Foldl[B, A] = Foldl.pure(a)
+      def times(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+        x.map2(y)(implicitly[Numeric[A]].times)
+
+      def toDouble(x: fold.Foldl[B,A]): Double =
+        implicitly[Numeric[A]].toDouble(x.extract)
+
+      def toFloat(x: fold.Foldl[B,A]): Float =
+        implicitly[Numeric[A]].toFloat(x.extract)
+
+      def toInt(x: fold.Foldl[B,A]): Int =
+        implicitly[Numeric[A]].toInt(x.extract)
+
+      def toLong(x: fold.Foldl[B,A]): Long =
+        implicitly[Numeric[A]].toLong(x.extract)
+
+      def compare(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): Int =
+        x.map2(y)(implicitly[Numeric[A]].compare).extract
+
+  }
+
+  implicit def FoldFunctorApplyApplicative[B]: Applicative[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] =
+    new Applicative[({type f[a] = Foldl[B, a]})#f] with Apply[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] {
+      override def map[A, C](a: Foldl[B, A])(f: A => C) =
+        a map f
+
+      def ap[A, C](a: => Foldl[B, A])(f: => Foldl[B, A => C]): Foldl[B, C] =
+        a ap f
+
+      def point[A](a: => A): Foldl[B, A] =
+        Foldl.pure(a)
   }
 
   implicit def FoldProfunctor: Profunctor[Foldl] =
     new Profunctor[Foldl] {
-      override def mapfst[B, A, C](fab: fold.Foldl[B, A])(f: C => B): fold.Foldl[C, A] = fab lmap f
-      override def mapsnd[B, A, C](fab: fold.Foldl[B, A])(f: A => C): fold.Foldl[B, C] = fab rmap f
+      override def mapfst[B, A, C](fab: fold.Foldl[B, A])(f: C => B): fold.Foldl[C, A] =
+        fab lmap f
+
+      override def mapsnd[B, A, C](fab: fold.Foldl[B, A])(f: A => C): fold.Foldl[B, C] =
+        fab rmap f
     }
+
   implicit def FoldlMonoid[B, A: Monoid]: Monoid[Foldl[B, A]] =
     new Monoid[Foldl[B, A]]{
-      def zero = Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
-      def append(a: Foldl[B, A], b: => Foldl[B, A]) = Applicative[({type f[a] = Foldl[B, a]})#f].apply2(a, b)(implicitly[Monoid[A]].append(_, _))
+      def zero =
+        Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
+
+      def append(a: Foldl[B, A], b: => Foldl[B, A]) =
+        Applicative[({type f[a] = Foldl[B, a]})#f].apply2(a, b)(implicitly[Monoid[A]].append(_, _))
     }
 
   implicit def FoldComonad[B]: Comonad[({type f[a] = Foldl[B, a]})#f] =
     new Comonad[({type f[a] = Foldl[B, a]})#f] {
-      def cobind[A, C](fa: Foldl[B,A])(f: Foldl[B,A] => C): fold.Foldl[B, C] = Foldl((b: B) => fa.step(b).duplicate, (unit: Unit) => fa).map(f)
-      def copoint[A](p: fold.Foldl[B,A]): A = p.extract
-      def map[A, C](fa: fold.Foldl[B,A])(f: A => C): fold.Foldl[B,C] = fa map f
+      def cobind[A, C](fa: Foldl[B,A])(f: Foldl[B,A] => C): fold.Foldl[B, C] =
+        Foldl((b: B) => fa.step(b).duplicate, (unit: Unit) => fa).map(f)
+
+      def copoint[A](p: fold.Foldl[B,A]): A =
+        p.extract
+
+      def map[A, C](fa: fold.Foldl[B,A])(f: A => C): fold.Foldl[B,C] =
+        fa map f
+
     }
+
 }
