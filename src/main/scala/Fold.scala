@@ -102,30 +102,29 @@ trait FoldlFunctions {
       }) map { case (_, f: (List[A] => List[A])) => f(List()) }
   }
 
-  def fromInt[B, A: Numeric](x: Int): fold.Foldl[B,A] =
-    Foldl.pure(implicitly[Numeric[A]].fromInt(x))
-
-  def minus[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-    x.map2(y)(implicitly[Numeric[A]].minus)
-
-  def negate[B, A: Numeric](x: fold.Foldl[B,A]): fold.Foldl[B,A] =
-    x.map(implicitly[Numeric[A]].negate)
-
-  def plus[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-    x.map2(y)(implicitly[Numeric[A]].plus)
-
-  def times[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-    x.map2(y)(implicitly[Numeric[A]].times)
-
-
-  def divide[B, A: Fractional](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-    x.map2(y)(implicitly[Fractional[A]].div)
-
-  def compare[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): Int =
-    x.map2(y)(implicitly[Numeric[A]].compare).extract
 }
 
 trait FoldlInstances {
+
+  implicit class FoldlNumeric[B, A: Fractional](x: Foldl[B, A]){
+    def -(y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+      x.map2(y)(implicitly[Numeric[A]].minus)
+
+    def negate: fold.Foldl[B,A] =
+      x.map(implicitly[Numeric[A]].negate)
+
+    def +(y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+      x.map2(y)(implicitly[Numeric[A]].plus)
+
+    def *(y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+      x.map2(y)(implicitly[Numeric[A]].times)
+
+    def /(y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+      x.map2(y)(implicitly[Fractional[A]].div)
+
+    def compare(y: fold.Foldl[B,A]): Int =
+      x.map2(y)(implicitly[Numeric[A]].compare).extract
+  }
 
   implicit def FoldFunctorApplyApplicative[B]: Applicative[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] =
     new Applicative[({type f[a] = Foldl[B, a]})#f] with Apply[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] {

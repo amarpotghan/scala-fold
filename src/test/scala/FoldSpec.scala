@@ -101,7 +101,7 @@ class FoldSpecs extends Specification {
   def dedupOnFoldableSpec = Foldl.dedup.foldl(List[Int](1, 2, 3, 3)) must_== List(1, 2, 3)
 
   def avgSpec = {
-    val avgFold = Foldl.divide(Foldl.sum[Double], Foldl.length[Double, Double])
+    val avgFold = Foldl.sum[Double] / Foldl.length[Double, Double]
     avgFold.foldl(Seq[Double](1, 2, 3, 4, 5)) must_== 3
   }
 
