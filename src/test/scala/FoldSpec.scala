@@ -6,6 +6,7 @@ import scala.collection.{Seq}
 import canfold._
 import scalaz._
 import std.list._
+import scala.math._
 
 class FoldSpecs extends Specification {
   import CanFold._
@@ -51,6 +52,7 @@ class FoldSpecs extends Specification {
 
             $reverseSpec
             $dedupSpec
+            $avgSpec
          """
 
   def lengthSpec = Foldl.length[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -97,5 +99,10 @@ class FoldSpecs extends Specification {
 
   def dedupSpec = Foldl.dedup.foldl(Seq[Int](1, 2, 3, 3)) must_== List(1, 2, 3)
   def dedupOnFoldableSpec = Foldl.dedup.foldl(List[Int](1, 2, 3, 3)) must_== List(1, 2, 3)
+
+  def avgSpec = {
+    val avgFold = Foldl.divide(Foldl.sum[Double], Foldl.length[Double, Double])
+    avgFold.foldl(Seq[Double](1, 2, 3, 4, 5)) must_== 3
+  }
 
 }

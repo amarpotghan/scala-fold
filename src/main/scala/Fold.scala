@@ -102,43 +102,30 @@ trait FoldlFunctions {
       }) map { case (_, f: (List[A] => List[A])) => f(List()) }
   }
 
+  def fromInt[B, A: Numeric](x: Int): fold.Foldl[B,A] =
+    Foldl.pure(implicitly[Numeric[A]].fromInt(x))
+
+  def minus[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+    x.map2(y)(implicitly[Numeric[A]].minus)
+
+  def negate[B, A: Numeric](x: fold.Foldl[B,A]): fold.Foldl[B,A] =
+    x.map(implicitly[Numeric[A]].negate)
+
+  def plus[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+    x.map2(y)(implicitly[Numeric[A]].plus)
+
+  def times[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+    x.map2(y)(implicitly[Numeric[A]].times)
+
+
+  def divide[B, A: Fractional](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
+    x.map2(y)(implicitly[Fractional[A]].div)
+
+  def compare[B, A: Numeric](x: fold.Foldl[B,A],y: fold.Foldl[B,A]): Int =
+    x.map2(y)(implicitly[Numeric[A]].compare).extract
 }
 
 trait FoldlInstances {
-
-  implicit def FoldNumber[B, A: Numeric]: Numeric[Foldl[B, A]] =
-    new Numeric[Foldl[B, A]] {
-      def fromInt(x: Int): fold.Foldl[B,A] =
-        Foldl.pure(implicitly[Numeric[A]].fromInt(x))
-
-      def minus(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-        x.map2(y)(implicitly[Numeric[A]].minus)
-
-      def negate(x: fold.Foldl[B,A]): fold.Foldl[B,A] =
-        x.map(implicitly[Numeric[A]].negate)
-
-      def plus(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-        x.map2(y)(implicitly[Numeric[A]].plus)
-
-      def times(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): fold.Foldl[B,A] =
-        x.map2(y)(implicitly[Numeric[A]].times)
-
-      def toDouble(x: fold.Foldl[B,A]): Double =
-        implicitly[Numeric[A]].toDouble(x.extract)
-
-      def toFloat(x: fold.Foldl[B,A]): Float =
-        implicitly[Numeric[A]].toFloat(x.extract)
-
-      def toInt(x: fold.Foldl[B,A]): Int =
-        implicitly[Numeric[A]].toInt(x.extract)
-
-      def toLong(x: fold.Foldl[B,A]): Long =
-        implicitly[Numeric[A]].toLong(x.extract)
-
-      def compare(x: fold.Foldl[B,A],y: fold.Foldl[B,A]): Int =
-        x.map2(y)(implicitly[Numeric[A]].compare).extract
-
-  }
 
   implicit def FoldFunctorApplyApplicative[B]: Applicative[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] =
     new Applicative[({type f[a] = Foldl[B, a]})#f] with Apply[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] {
