@@ -104,7 +104,19 @@ class FoldSpecs extends Specification {
 
   def avgSpec = {
     val avgFold = Foldl.sum[Double] / Foldl.length[Double, Double]
-    avgFold.foldl(Seq[Double](1, 2, 3, 4, 5)) must_== 3
+    avgFold.foldl(Seq(1.0, 2.0, 3.0, 4.0, 5.0)) must_== 3.0
+  }
+
+  def syntaxSpec1 = {
+    import fold.syntax._
+    import Syntax._
+    import fold._
+
+    Seq(1, 2, 3).foldWith(Foldl.length[Int, Int]) must_== 3
+
+    def avg = Foldl.sum[Double] / Foldl.length[Double, Double]
+    Seq(1.0, 2.0, 3.0) foldWith avg must_== 2
+
   }
 
 }
