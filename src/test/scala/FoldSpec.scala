@@ -108,9 +108,7 @@ class FoldSpecs extends Specification {
   }
 
   def syntaxSpec1 = {
-    import fold.syntax._
-    import Syntax._
-    import fold._
+    import fold.syntax.Syntax._
 
     Seq(1, 2, 3).foldWith(Foldl.length[Int, Int]) must_== 3
 
