@@ -63,6 +63,9 @@ trait FoldlFunctions {
   def length[B, A](implicit a: Numeric[A]): Foldl[B, A] =
     createWith(a.zero)((x: A, _: B) => a.plus(x, a.one))
 
+  def length[B]: Foldl[B, Int] =
+    createWith(0)((x: Int, _: B) => x + 1)
+
   def sum[B](implicit N: Numeric[B]): Foldl[B, B] =
     createWith(N.zero)((x: B, y: B) => N.plus(x, y))
 

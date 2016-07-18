@@ -24,6 +24,9 @@ import fold._
 scala> import scalaz._
 import scalaz._
 
+scala> type Fold[A] = Foldl[Double, A]
+defined type alias Fold
+
 scala> def mean = Apply[Fold].apply2(Foldl.sum[Double], Foldl.length[Double, Double])(_ / _)
 mean: Fold[Double]
 
