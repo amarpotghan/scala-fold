@@ -1,10 +1,10 @@
 # scala-fold
-scala port for Gabriel's haskell-foldl-library for Applicative'ly composable folds
+Composable folds in Scala
 
 # Introduction
 
 This library defines the `Foldl` data type (a left fold) which can be combined in the applicative style such that resulting
-fold requires only one traversal over the foldable data structure.
+fold requires only one traversal over the given structure.
 
 Library comes with common folds. You can always define your own fold by providing a step function and initial value.
 
@@ -95,6 +95,14 @@ res2: Double = 2.0
 
 ```
 `(/)` function uses Foldl's applicative instance, so again List is traversed only once.
+
+
+# Credits
+
+* Gabriel Gonzalez(https://github.com/Gabriel439)'s foldl library(https://hackage.haskell.org/package/foldl)
+* Phil Freeman's purescript-folds(https://github.com/paf31/purescript-folds)
+* Max Rabkin’s "Beautiful folding"(http://squing.blogspot.sg/2008/11/beautiful-folding.html)
+* Conal Elliott's blogpost(http://conal.net/blog/posts/another-lovely-example-of-type-class-morphisms)
 
 
 Feedbacks welcome!
