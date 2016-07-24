@@ -54,6 +54,16 @@ class FoldSpecs extends Specification {
             $dedupSpec
             $avgSpec
 
+            $containsSpec
+            $containsSpec2
+            $containsSpec3
+
+
+            $doesNotContainSpec
+            $doesNotContainSpec2
+            $doesNotContainSpec3
+            $cProp
+
             $syntaxSpec1
          """
 
@@ -117,4 +127,15 @@ class FoldSpecs extends Specification {
 
   }
 
+
+  def containsSpec = Foldl.contains(1).foldl(Seq(1, 2, 3)) must_== true
+  def containsSpec2 = Foldl.contains(4).foldl(Seq(1, 2, 3)) must_== false
+  def containsSpec3 = Foldl.contains(4).foldl(Seq[Int]()) must_== false
+
+
+  def doesNotContainSpec = Foldl.doesNotContain(1).foldl(Seq(1, 2, 3)) must_== false
+  def doesNotContainSpec2 = Foldl.doesNotContain(4).foldl(Seq(1, 2, 3)) must_== true
+  def doesNotContainSpec3 = Foldl.doesNotContain(4).foldl(Seq[Int]()) must_== true
+
+  def cProp = Foldl.doesNotContain(-1331431553).foldl(Seq[Int]()) must_== ! (Foldl.contains(-1331431553).foldl(Seq[Int]()))
 }

@@ -98,6 +98,10 @@ trait FoldlFunctions {
 
   def reverse[A]: Foldl[A, List[A]] = createWith(Nil: List[A])((x: List[A], y:A) => y :: x)
 
+  def contains[A](e: A): Foldl[A, Boolean] = any(_.equals(e))
+
+  def doesNotContain[A](e: A): Foldl[A, Boolean] = all(!_.equals(e))
+
   def dedup[A]: Foldl[A, List[A]] = {
     val es = Set[A]()
     createWith((es, identity: List[A] => List[A]))(
