@@ -99,10 +99,10 @@ res2: Double = 2.0
 
 # Credits
 
-* Gabriel Gonzalez(https://github.com/Gabriel439)'s foldl library(https://hackage.haskell.org/package/foldl)
-* Phil Freeman's purescript-folds(https://github.com/paf31/purescript-folds)
-* Max Rabkin’s "Beautiful folding"(http://squing.blogspot.sg/2008/11/beautiful-folding.html)
-* Conal Elliott's blogpost(http://conal.net/blog/posts/another-lovely-example-of-type-class-morphisms)
+* [Gabriel Gonzalez](https://github.com/Gabriel439)'s [foldl library](https://hackage.haskell.org/package/foldl)
+* Phil Freeman's [purescript-folds](https://github.com/paf31/purescript-folds)
+* Max Rabkin’s [Beautiful folding](http://squing.blogspot.sg/2008/11/beautiful-folding.html)
+* Conal Elliott's [blogpost](http://conal.net/blog/posts/another-lovely-example-of-type-class-morphisms)
 
 
 Feedbacks welcome!
