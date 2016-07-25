@@ -63,6 +63,10 @@ class FoldSpecs extends Specification {
             $doesNotContainSpec
             $doesNotContainSpec2
             $doesNotContainSpec3
+
+            $minimumBySpec
+            $maximumBySpec
+
             $cProp
             $foldMapSpec
             $syntaxSpec1
@@ -143,5 +147,15 @@ class FoldSpecs extends Specification {
   def foldMapSpec = {
     val x = Foldl.foldMap((x: Int) => x.toString)((x: String) => x.length())
     x.foldl(Seq(10, 20, 30, 40)) must_== 8
+  }
+
+  def maximumBySpec = {
+    Foldl.maximumBy((x: String) => x.toInt).foldl(Seq("1", "2", "3")) must_== Some("3")
+    Foldl.maximumBy((x: String) => x.toInt).foldl(Seq[String]()) must_== None
+  }
+
+  def minimumBySpec = {
+    Foldl.minimumBy((x: String) => x.toInt).foldl(Seq("1", "2", "3")) must_== Some("1")
+    Foldl.minimumBy((x: String) => x.toInt).foldl(Seq[String]()) must_== None
   }
 }

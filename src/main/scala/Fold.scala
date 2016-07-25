@@ -100,9 +100,27 @@ trait FoldlFunctions {
 
   def or[A]: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
 
-  def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] = helperFold(implicitly[DefaultOrdering[A]].max _)
+  def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] =
+    helperFold(implicitly[DefaultOrdering[A]].max _)
 
-  def minimum[A: DefaultOrdering]: Foldl[A, Option[A]] = helperFold(implicitly[DefaultOrdering[A]].min _)
+  def minimum[A: DefaultOrdering]: Foldl[A, Option[A]] =
+    helperFold(implicitly[DefaultOrdering[A]].min _)
+
+  def maximumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
+    helperFold((b1: B, b2: B) =>
+      implicitly[DefaultOrdering[A]].compare(f(b1), f(b2)) match {
+        case x if x < 0 => b2
+        case _          => b1
+      }
+    )
+
+  def minimumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
+    helperFold((b1: B, b2: B) =>
+      implicitly[DefaultOrdering[A]].compare(f(b1), f(b2)) match {
+        case x if x < 0 => b1
+        case _          => b2
+      }
+    )
 
   def last[A]: Foldl[A, Option[A]] = helperFold((_: A, y: A) => y)
 
