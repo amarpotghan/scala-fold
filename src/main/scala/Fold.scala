@@ -134,7 +134,7 @@ trait FoldlInstances {
       x.map2(y)(implicitly[Numeric[A]].compare).extract
   }
 
-  implicit def FoldFunctorApplyApplicative[B]: Applicative[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] =
+  implicit def FoldFunctorApplyApplicative[B] =
     new Applicative[({type f[a] = Foldl[B, a]})#f] with Apply[({type f[a] = Foldl[B, a]})#f] with Functor[({type f[a] = Foldl[B, a]})#f] {
       override def map[A, C](a: Foldl[B, A])(f: A => C) =
         a map f
@@ -146,7 +146,7 @@ trait FoldlInstances {
         Foldl.pure(a)
   }
 
-  implicit def FoldProfunctor: Profunctor[Foldl] =
+  implicit def FoldProfunctor =
     new Profunctor[Foldl] {
       override def mapfst[B, A, C](fab: fold.Foldl[B, A])(f: C => B): fold.Foldl[C, A] =
         fab lmap f
@@ -155,7 +155,7 @@ trait FoldlInstances {
         fab rmap f
     }
 
-  implicit def FoldlMonoid[B, A: Monoid]: Monoid[Foldl[B, A]] =
+  implicit def FoldlMonoid[B, A: Monoid] =
     new Monoid[Foldl[B, A]]{
       def zero =
         Applicative[({type f[a] = Foldl[B, a]})#f].point(implicitly[Monoid[A]].zero)
@@ -164,7 +164,7 @@ trait FoldlInstances {
         Applicative[({type f[a] = Foldl[B, a]})#f].apply2(a, b)(implicitly[Monoid[A]].append(_, _))
     }
 
-  implicit def FoldComonad[B]: Comonad[({type f[a] = Foldl[B, a]})#f] =
+  implicit def FoldComonad[B] =
     new Comonad[({type f[a] = Foldl[B, a]})#f] {
       def cobind[A, C](fa: Foldl[B,A])(f: Foldl[B,A] => C): fold.Foldl[B, C] =
         Foldl((b: B) => fa.step(b).duplicate, (unit: Unit) => fa).map(f)
