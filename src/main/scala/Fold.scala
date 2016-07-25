@@ -52,6 +52,11 @@ object Foldl extends FoldlFunctions with FoldlInstances {
     def con: Foldl[B, A] = Foldl(_ => con, unit => a)
     con
   }
+
+  def foldMap[B, A, M: Monoid](f: B => M)(g: M => A): Foldl[B, A] = {
+    lazy val i = implicitly[Monoid[M]]
+    createWith(i.zero)((x: M, e: B) => i.append(x, f(e))).map(g)
+  }
 }
 
 trait FoldlFunctions {

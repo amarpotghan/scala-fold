@@ -6,6 +6,7 @@ import scala.collection.{Seq}
 import canfold._
 import scalaz._
 import std.list._
+import std.string._
 import scala.math._
 
 class FoldSpecs extends Specification {
@@ -63,7 +64,7 @@ class FoldSpecs extends Specification {
             $doesNotContainSpec2
             $doesNotContainSpec3
             $cProp
-
+            $foldMapSpec
             $syntaxSpec1
          """
 
@@ -138,4 +139,9 @@ class FoldSpecs extends Specification {
   def doesNotContainSpec3 = Foldl.doesNotContain(4).foldl(Seq[Int]()) must_== true
 
   def cProp = Foldl.doesNotContain(-1331431553).foldl(Seq[Int]()) must_== ! (Foldl.contains(-1331431553).foldl(Seq[Int]()))
+
+  def foldMapSpec = {
+    val x = Foldl.foldMap((x: Int) => x.toString)((x: String) => x.length())
+    x.foldl(Seq(10, 20, 30, 40)) must_== 8
+  }
 }
