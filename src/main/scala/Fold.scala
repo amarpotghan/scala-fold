@@ -146,7 +146,7 @@ trait FoldlInstances {
         Foldl.pure(a)
   }
 
-  implicit def FoldProfunctor =
+  implicit val FoldProfunctor =
     new Profunctor[Foldl] {
       override def mapfst[B, A, C](fab: fold.Foldl[B, A])(f: C => B): fold.Foldl[C, A] =
         fab lmap f
