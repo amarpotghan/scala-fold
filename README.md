@@ -13,6 +13,7 @@ Library also comes with an extension method on scala's standard collections `fol
 ```scala
 import fold._
 import Fold._
+import fold.syntax.Syntax._
 
 List(1, 2, 3).foldWith(sum[Int])
 
