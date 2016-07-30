@@ -8,6 +8,7 @@ import fold.syntax.Syntax._
 
 trait CanFold[F[_], B] {
   def fold[A](fa: F[B])(fo: Foldl[B, A]): A
+  def scan[A](fa: F[B])(fo: Foldl[B, A]): Seq[A]
 }
 
 object CanFold extends CanFoldInstances
@@ -18,5 +19,7 @@ trait CanFoldInstances {
     def fold[A](xs: F[B])(fo: Foldl[B, A]): A =
       xs.foldWith(fo)
 
+    def scan[A](xs: F[B])(fo: Foldl[B, A]): Seq[A] =
+      xs.scanWith(fo)
   }
 }

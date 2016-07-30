@@ -70,6 +70,8 @@ class FoldSpecs extends Specification {
             $cProp
             $foldMapSpec
             $syntaxSpec1
+
+            $sumScanSpec
          """
 
   def lengthSpec = Foldl.length[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -157,5 +159,10 @@ class FoldSpecs extends Specification {
   def minimumBySpec = {
     Foldl.minimumBy((x: String) => x.toInt).foldl(Seq("1", "2", "3")) must_== Some("1")
     Foldl.minimumBy((x: String) => x.toInt).foldl(Seq[String]()) must_== None
+  }
+
+  def sumScanSpec = {
+    import fold.syntax.Syntax._
+    Seq(1, 2, 3).scanWith(Foldl.sum[Int]) must_== Seq(0, 1, 3, 6)
   }
 }

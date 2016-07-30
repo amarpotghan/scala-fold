@@ -9,6 +9,9 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
   def foldl[G[_]](xs: G[B])(implicit Can: CanFold[G, B]): A =
     Can.fold(xs)(this)
 
+  def scanl[G[_]](xs: G[B])(implicit Can: CanFold[G, B]): G[B] =
+    Can.scan(xs)(this)
+
   def extract: A = done(())
 
   def ap[C](other: Foldl[B, A => C]): Foldl[B, C] =
@@ -26,6 +29,7 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
   def lmap[C](f: C => B): Foldl[C, A] = dimap(f, identity)
 
   def rmap[D](g: A => D): Foldl[B, D] = dimap(identity, g)
+
 
 }
 
