@@ -17,7 +17,6 @@ lazy val foldlScalacOptions = Seq(
 )
 
 lazy val foldSettings = Seq(
-  organization := "",
   version := "0.0.1",
   scalaVersion := "2.11.8",
   scalacOptions ++= foldlScalacOptions,

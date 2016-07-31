@@ -1,10 +1,11 @@
 package fold
 
-import fold._
+import Foldl._
+import Extensions._
+
 import scalaz.{Foldable => SFoldable}
 import scala.collection.{ GenTraversableLike => G }
 import scala.collection._
-import Extensions._
 
 trait CanFold[F[_], B] {
   def fold[A](fa: F[B])(fo: Foldl[B, A]): A

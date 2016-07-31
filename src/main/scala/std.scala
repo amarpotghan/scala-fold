@@ -1,6 +1,6 @@
 package fold
 
-import fold._
+import Foldl._
 import scala.collection.generic.{ CanBuildFrom, IsTraversableLike}
 import scala.collection.{ GenTraversable, GenTraversableLike }
 
@@ -9,7 +9,7 @@ class FoldableCollection[A, R <% GenTraversableLike[_,R]](val r: GenTraversableL
     r.foldLeft(fo)(_ step _).extract
   }
 
-  def scanWith[S, That](fo: Foldl[A, S]): Seq[S] = {
+  def scanWith[S](fo: Foldl[A, S]): Seq[S] = {
     r.foldLeft((Seq[Foldl[A, S]](fo))) { (acc, e) =>
       val nextFo = acc.last.step(e)
       acc :+ nextFo
