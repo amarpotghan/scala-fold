@@ -1,5 +1,4 @@
 package fold
-package syntax
 
 import fold._
 import scala.collection.generic.{ CanBuildFrom, IsTraversableLike}
@@ -19,10 +18,9 @@ class FoldableCollection[A, R <% GenTraversableLike[_,R]](val r: GenTraversableL
 
 }
 
+object Extensions extends Extensions
 
-
-
-object Syntax {
-  implicit def toFold[A, R <% GenTraversableLike[_,R]](r: R)(implicit fr: IsTraversableLike[R]): FoldableCollection[fr.A, R] =
+trait Extensions {
+  implicit def toFold[A, R <% GenTraversableLike[_,R]] (r: R) (implicit fr: IsTraversableLike[R]): FoldableCollection[fr.A, R] =
     new FoldableCollection(fr conversion r)
 }
