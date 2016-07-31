@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/amarpotghan/scala-fold.svg?branch=master)](https://travis-ci.org/amarpotghan/scala-fold)
 # scala-fold
 Composable folds in Scala
 
