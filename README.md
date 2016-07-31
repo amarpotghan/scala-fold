@@ -14,7 +14,6 @@ Library also comes with an extension method on scala's standard collections `fol
 ```scala
 import fold._
 import Fold._
-import fold.syntax.Syntax._
 
 List(1, 2, 3).foldWith(sum[Int])
 
@@ -26,11 +25,11 @@ List(1, 2, 3).foldWith(sum[Int])
 
 ```scala
 
-scala> import fold.Foldl._
-import fold.Foldl._
+scala> import fold._
+import fold._
 
-scala> import fold.syntax.Syntax._
-import fold.syntax.Syntax._
+scala> import Fold._
+import Fold._
 
 scala> Seq(1, 2, 3).foldWith(sum[Int])
 res1: Int = 6
@@ -41,11 +40,11 @@ res1: Int = 6
 
 ```scala
 
-scala> import fold.Foldl._
-import fold.Foldl._
+scala> import fold._
+import fold._
 
-scala> import fold.syntax.Syntax._
-import fold.syntax.Syntax._
+scala> import Fold._
+import Fold._
 
 scala> import scalaz._
 import scalaz._
@@ -83,11 +82,11 @@ res3: Double = 2.0
 
 ```scala
 
-scala> import fold.Foldl._
-import fold.Foldl._
+scala> import fold._
+import fold._
 
-scala> import fold.syntax.Syntax._
-import fold.syntax.Syntax._
+scala> import Fold._
+import Fold._
 
 scala> def mean = sum[Double] / length[Double, Double]
 mean: fold.Foldl[Double,Double]
