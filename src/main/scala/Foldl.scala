@@ -99,10 +99,18 @@ trait FoldlFunctions {
   def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
 
   def takeWhile[B](p: B => Boolean): Foldl[B, Seq[B]] =
-    createWith((Seq[B](), false)) ((x: (Seq[B], Boolean), e: B) => x match {
-                                      case (xs, false) => (xs ++: Seq(e), p(e))
-                                      case (xs, true) => (xs, true)
-                                  }) map (_._1)
+    createWith((Seq[B](), false)) ((x: (Seq[B], Boolean), e: B) =>
+      x match {
+        case (xs, false) => (xs :+ e, p(e))
+        case (xs, true) => (xs, true)
+      }) map (_._1)
+
+  def dropWhile[B](p: B => Boolean): Foldl[B, Seq[B]] =
+    createWith((Seq[B](), Seq[B]())) ((x: (Seq[B], Seq[B]), e: B) =>
+     x match {
+       case (r, o) => (if(p(e)) r else o :+ e, o :+ e)
+      }) map (_._1)
+
 
   def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] =
     helperFold(implicitly[DefaultOrdering[A]].max _)

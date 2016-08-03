@@ -73,6 +73,7 @@ class FoldSpecs extends Specification {
 
             $sumScanSpec
             $takeWhileSpec
+            $dropWhileSpec
          """
 
   def lengthSpec = foldLength[String, Int].foldl(Seq("1", "2", "3", "4"))  must_== 4
@@ -168,5 +169,13 @@ class FoldSpecs extends Specification {
     Seq(1, 2, 3).foldWith(takeWhile[Int](x => x >= 2)) must_== Seq(1, 2)
     Seq[Int]().foldWith(takeWhile[Int](x => x >= 2)) must_== Seq()
     Seq(1, 2, 3, 4, 5).foldWith(takeWhile[Int](x => x >= 5)) must_== Seq(1, 2, 3, 4, 5)
+  }
+
+
+  def dropWhileSpec = {
+    Seq(1, 2, 3).foldWith(dropWhile[Int](x => x == 2)) must_== Seq(3)
+    Seq[Int]().foldWith(dropWhile[Int](x => x >= 2)) must_== Seq()
+    Seq(1, 2, 3, 4, 5).foldWith(dropWhile[Int](x => x <= 3)) must_== Seq(4, 5)
+    Seq(1, 2, 3, 4, 5).foldWith(dropWhile[Int](x => x < 0)) must_== Seq(1, 2, 3, 4, 5)
   }
 }
