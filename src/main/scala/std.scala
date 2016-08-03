@@ -1,6 +1,5 @@
 package fold
 
-import Foldl._
 import scala.collection.generic.{ CanBuildFrom, IsTraversableLike}
 import scala.collection.{ GenTraversable, GenTraversableLike }
 

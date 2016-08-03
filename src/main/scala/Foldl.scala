@@ -90,9 +90,15 @@ trait FoldlFunctions {
   def all[A](p: A => Boolean): Foldl[A, Boolean] =
     createWith(true)((acc: Boolean, e: A) => acc && p(e))
 
-  def and[A]: Foldl[Boolean, Boolean] = createWith(true)(_ && _)
+  def and: Foldl[Boolean, Boolean] = createWith(true)(_ && _)
 
-  def or[A]: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
+  def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
+
+  def takeWhile[B](p: B => Boolean): Foldl[B, Seq[B]] =
+    createWith((Seq[B](), false)) ((x: (Seq[B], Boolean), e: B) => x match {
+                                      case (xs, false) => (xs ++: Seq(e), p(e))
+                                      case (xs, true) => (xs, true)
+                                  }) map (_._1)
 
   def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] =
     helperFold(implicitly[DefaultOrdering[A]].max _)

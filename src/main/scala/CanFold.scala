@@ -1,6 +1,5 @@
 package fold
 
-import Foldl._
 import Extensions._
 
 import scalaz.{Foldable => SFoldable}
