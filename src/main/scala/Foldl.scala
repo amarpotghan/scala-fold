@@ -90,6 +90,10 @@ trait FoldlFunctions {
   def all[A](p: A => Boolean): Foldl[A, Boolean] =
     createWith(true)((acc: Boolean, e: A) => acc && p(e))
 
+  def forall[A](p: A => Boolean): Foldl[A, Boolean] = all(p)
+
+  def forany[A](p: A => Boolean): Foldl[A, Boolean] = any(p)
+
   def and: Foldl[Boolean, Boolean] = createWith(true)(_ && _)
 
   def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
