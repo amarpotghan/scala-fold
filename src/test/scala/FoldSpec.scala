@@ -13,42 +13,26 @@ class FoldSpecs extends Specification {
   import CanFold._
   def is = sequential ^ s2"""Fold Specs
             $lengthSpec
-
             $isEmptySpec
-
             $sumSpec
             $productSpec
-
             $allSpec
-
             $anySpec
-
             $orSpec
-
             $andSpec
-
-
             $headSpec
-
             $lastSpec
             $lastOrElseSpec
-
             $reverseSpec
             $dedupSpec
             $avgSpec
-
             $containsSpec
-
-
             $doesNotContainSpec
-
             $minimumBySpec
             $maximumBySpec
-
             $cProp
             $foldMapSpec
             $syntaxSpec
-
             $sumScanSpec
             $takeWhileSpec
             $dropWhileSpec
@@ -84,13 +68,11 @@ class FoldSpecs extends Specification {
     any[String](Function.const(true)).foldl(Seq[String]()) must_== false
   }
 
-
   def orSpec = {
     or.foldl(Seq(true, true, false)) must_== true
     or.foldl(Seq(false, false)) must_== false
     or.foldl(Seq[Boolean]()) must_== false
   }
-
 
   def andSpec = {
     and.foldl(Seq(true, true, false)) must_== false
@@ -122,13 +104,11 @@ class FoldSpecs extends Specification {
 
   }
 
-
   def containsSpec = {
     contains(1).foldl(Seq(1, 2, 3)) must_== true
     contains(4).foldl(Seq(1, 2, 3)) must_== false
     contains(4).foldl(Seq[Int]()) must_== false
   }
-
 
   def doesNotContainSpec = {
     doesNotContain(1).foldl(Seq(1, 2, 3)) must_== false
@@ -162,7 +142,6 @@ class FoldSpecs extends Specification {
     Seq[Int]().foldWith(takeWhile[Int](x => x >= 2)) must_== Seq()
     Seq(1, 2, 3, 4, 5).foldWith(takeWhile[Int](x => x >= 5)) must_== Seq(1, 2, 3, 4, 5)
   }
-
 
   def dropWhileSpec = {
     Seq(1, 2, 3).foldWith(dropWhile[Int](x => x == 2)) must_== Seq(3)
