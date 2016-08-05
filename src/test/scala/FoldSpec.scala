@@ -177,5 +177,7 @@ class FoldSpecs extends Specification {
     Seq[Int]().foldWith(dropWhile[Int](x => x >= 2)) must_== Seq()
     Seq(1, 2, 3, 4, 5).foldWith(dropWhile[Int](x => x <= 3)) must_== Seq(4, 5)
     Seq(1, 2, 3, 4, 5).foldWith(dropWhile[Int](x => x < 0)) must_== Seq(1, 2, 3, 4, 5)
+    Seq(1, 2, 1, 3, 4, 5).foldWith(dropWhile[Int](x => x < 2)) must_== Seq(2, 1, 3, 4, 5)
+    Seq(1, 2, 1, 3, 4, 5).foldWith(dropWhile[Int](x => x < 0)) must_== Seq(1, 2, 1, 3, 4, 5)
   }
 }
