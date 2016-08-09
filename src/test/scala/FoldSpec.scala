@@ -35,6 +35,7 @@ class FoldSpecs extends Specification {
             $syntaxSpec
             $sumScanSpec
             $takeWhileSpec
+            $takeSpec
             $dropWhileSpec
          """
 
@@ -150,5 +151,12 @@ class FoldSpecs extends Specification {
     Seq(1, 2, 3, 4, 5).foldWith(dropWhile[Int](x => x < 0)) must_== Seq(1, 2, 3, 4, 5)
     Seq(1, 2, 1, 3, 4, 5).foldWith(dropWhile[Int](x => x < 2)) must_== Seq(2, 1, 3, 4, 5)
     Seq(1, 2, 1, 3, 4, 5).foldWith(dropWhile[Int](x => x < 0)) must_== Seq(1, 2, 1, 3, 4, 5)
+  }
+
+  def takeSpec = {
+    Seq(1, 2, 3).foldWith(take[Int](1)) must_== Seq(1)
+    Seq(1, 2, 3).foldWith(take[Int](0)) must_== Seq[Int]()
+    Seq(1, 2, 3).foldWith(take[Int](-1)) must_== Seq[Int]()
+    Seq(1, 2, 3).foldWith(take[Int](10)) must_== Seq(1, 2, 3)
   }
 }

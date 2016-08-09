@@ -98,6 +98,11 @@ trait FoldlFunctions {
 
   def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
 
+  def take[B](i: Int): Foldl[B, Seq[B]] =
+    createWith(Seq[B](), 0)((x: (Seq[B], Int), e: B) => x match {
+                              case (xs, ci) => if(ci <= i) (xs :+ e, ci + 1) else (xs, ci + 1)
+                            }) map (_._1)
+
   def takeWhile[B](p: B => Boolean): Foldl[B, Seq[B]] =
     createWith((Seq[B](), false)) ((x: (Seq[B], Boolean), e: B) =>
       x match {
