@@ -175,9 +175,11 @@ trait FoldlFunctions {
   def withMonoid[B: Monoid, A](f: B => A): Foldl[B, A] =
     foldMap(identity: B => B)(f)
 
+  def mconcat[B: Monoid, A](f: B => A): Foldl[B, A] =
+    foldMap(identity: B => B)(f)
+
   def withMonoid_[B: Monoid]: Foldl[B, B] =
     foldMap(identity: B => B)(identity: B => B)
-
 
 }
 
