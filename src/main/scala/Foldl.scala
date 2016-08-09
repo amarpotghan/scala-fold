@@ -99,16 +99,19 @@ trait FoldlFunctions {
   def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
 
   def take[B](i: Int): Foldl[B, Seq[B]] =
-    createWith(Seq[B](), 0)((x: (Seq[B], Int), e: B) => x match {
-                              case (xs, ci) => if(ci <= i) (xs :+ e, ci + 1) else (xs, ci + 1)
-                            }) map (_._1)
+    createWith(Seq[B](), 0) { (x: (Seq[B], Int), e: B) =>
+      x match {
+        case (xs, ci) => if(ci <= i) (xs :+ e, ci + 1) else (xs, ci + 1)
+      }
+    } map (_._1)
 
   def takeWhile[B](p: B => Boolean): Foldl[B, Seq[B]] =
-    createWith((Seq[B](), false)) ((x: (Seq[B], Boolean), e: B) =>
+    createWith((Seq[B](), false)) {(x: (Seq[B], Boolean), e: B) =>
       x match {
         case (xs, false) => (xs :+ e, p(e))
         case (xs, true) => (xs, true)
-      }) map (_._1)
+      }
+    } map (_._1)
 
   def dropWhile[B](p: B => Boolean): Foldl[B, Seq[B]] = {
     def step(e: B, x: (Seq[B], Seq[B])): (Seq[B], Seq[B]) = {
@@ -124,8 +127,6 @@ trait FoldlFunctions {
     fo.map(f => f((Seq[B](), Seq[B]()))._1.reverse)
   }
 
-
-
   def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] =
     helperFold(implicitly[DefaultOrdering[A]].max _)
 
@@ -133,12 +134,12 @@ trait FoldlFunctions {
     helperFold(implicitly[DefaultOrdering[A]].min _)
 
   def maximumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
-    helperFold((b1: B, b2: B) =>
+    helperFold {(b1: B, b2: B) =>
       implicitly[DefaultOrdering[A]].compare(f(b1), f(b2)) match {
         case x if x < 0 => b2
         case _          => b1
       }
-    )
+    }
 
   def minimumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
     helperFold((b1: B, b2: B) =>
