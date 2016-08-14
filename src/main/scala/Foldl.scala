@@ -6,11 +6,11 @@ import scalaz._
 
 sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
-  def foldl[G[_]](xs: G[B])(implicit Can: CanFold[G, B]): A =
-    Can.fold(xs)(this)
+  def foldl[G[_]](xs: G[B])(implicit foldable: CanFold[G, B]): A =
+    foldable.fold(xs)(this)
 
-  def scanl[G[_]](xs: G[B])(implicit Can: CanFold[G, B]): Seq[A] =
-    Can.scan(xs)(this)
+  def scanl[G[_]](xs: G[B])(implicit foldable: CanFold[G, B]): Seq[A] =
+    foldable.scan(xs)(this)
 
   def extract: A = done(())
 
