@@ -14,14 +14,16 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
 
   def extract: A = done(())
 
+  def <*>[C](other: Foldl[B, A => C]): Foldl[B, C] = ap(other)
+
   def ap[C](other: Foldl[B, A => C]): Foldl[B, C] =
-    Foldl(b => this.step(b).ap(other.step(b)), unit => other.done(unit)(this.done(unit)) )
+    Foldl (b => step(b) <*> other.step(b), unit => other.done(unit)(done(unit)))
 
   def map[C](f: A => C): Foldl[B, C] = Foldl((b: B) => step(b) map f, f compose done)
 
-  def map2[C, D](other: Foldl[B, C])(f: (A, C) => D): Foldl[B, D] = other.ap(map(f.curried))
+  def map2[C, D](other: Foldl[B, C])(f: (A, C) => D): Foldl[B, D] = other <*> map(f.curried)
 
-  def duplicate: Foldl[B, Foldl[B, A]] = this.map(Function.const(this))
+  def duplicate: Foldl[B, Foldl[B, A]] = map(Function.const(this))
 
   def dimap[C, D](f: C => B, g: A => D): Foldl[C, D] =
     Foldl[C, D]((c: C) => step(f(c)).dimap(f, g), g compose done)
@@ -29,7 +31,6 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
   def lmap[C](f: C => B): Foldl[C, A] = dimap(f, identity)
 
   def rmap[D](g: A => D): Foldl[B, D] = dimap(identity, g)
-
 
 }
 
@@ -56,8 +57,6 @@ object Foldl extends FoldlFunctions with FoldlInstances {
     def con: Foldl[B, A] = Foldl(_ => con, unit => a)
     con
   }
-
-
 }
 
 trait FoldlFunctions {
@@ -138,7 +137,7 @@ trait FoldlFunctions {
       implicitly[DefaultOrdering[A]].compare(f(b1), f(b2)) match {
         case x if x < 0 => b2
         case _          => b1
-      }
+   }
     }
 
   def minimumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
@@ -163,7 +162,10 @@ trait FoldlFunctions {
     val es = Set[A]()
     createWith((es, identity: List[A] => List[A]))(
       (tup: (Set[A], List[A] => List[A]), y:A) => tup match {
-        case (set: Set[A], f: (List[A] => List[A])) => if(set.contains(y)) (set, f) else (set + y, f compose (y :: _))
+        case (set: Set[A], f: (List[A] => List[A])) =>
+          if(set.contains(y))
+            (set, f)
+          else (set + y, f compose (y :: _))
       }) map { case (_, f: (List[A] => List[A])) => f(List()) }
   }
 
