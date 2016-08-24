@@ -113,17 +113,13 @@ trait FoldlFunctions {
     } map (_._1)
 
   def dropWhile[B](p: B => Boolean): Foldl[B, Seq[B]] = {
-    def step(e: B, x: (Seq[B], Seq[B])): (Seq[B], Seq[B]) = {
-      x match {
-        case (r, o) => (if(p(e)) r else o :+ e, o :+ e)
+    createWith((false, Seq[B]())){(acc: (Boolean, Seq[B]), e: B) =>
+      acc match {
+        case (true, xs) => (true, xs :+ e)
+        case (false, xs) => if(p(e)) (false, xs) else (true, xs :+ e)
       }
-    }
 
-    def f = (fn: (((Seq[B], Seq[B])) => (Seq[B], Seq[B])), e: B) => {
-        (x: (Seq[B], Seq[B])) => fn(step(e, x))
-    }
-    val fo =  createWith((x: (Seq[B], Seq[B])) => identity(x))(f)
-    fo.map(f => f((Seq[B](), Seq[B]()))._1.reverse)
+    } map (_._2)
   }
 
   def maximum[A: DefaultOrdering]: Foldl[A, Option[A]] =
@@ -137,7 +133,7 @@ trait FoldlFunctions {
       implicitly[DefaultOrdering[A]].compare(f(b1), f(b2)) match {
         case x if x < 0 => b2
         case _          => b1
-   }
+      }
     }
 
   def minimumBy[B, A: DefaultOrdering](f: B => A): Foldl[B, Option[B]] =
