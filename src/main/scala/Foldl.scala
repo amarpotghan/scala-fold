@@ -9,6 +9,8 @@ sealed class Foldl[B, A](val step: B => Foldl[B, A], val done: Unit => A) {
   def foldl[G[_]](xs: G[B])(implicit foldable: CanFold[G, B]): A =
     foldable.fold(xs)(this)
 
+  def of[G[_]](xs: G[B])(implicit foldable: CanFold[G, B]): A = foldl(xs)
+
   def scanl[G[_]](xs: G[B])(implicit foldable: CanFold[G, B]): Seq[A] =
     foldable.scan(xs)(this)
 
