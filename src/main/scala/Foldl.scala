@@ -100,7 +100,7 @@ trait FoldlFunctions {
   def or: Foldl[Boolean, Boolean] = createWith(false)(_ || _)
 
   def take[B](i: Int): Foldl[B, Seq[B]] =
-    createWith(Seq[B](), 0) { (x: (Seq[B], Int), e: B) =>
+    createWith((Seq[B](), 0)) { (x: (Seq[B], Int), e: B) =>
       x match {
         case (xs, ci) => if(ci <= i) (xs :+ e, ci + 1) else (xs, ci + 1)
       }

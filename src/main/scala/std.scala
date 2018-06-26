@@ -1,7 +1,7 @@
 package fold
 
-import scala.collection.generic.{ CanBuildFrom, IsTraversableLike}
-import scala.collection.{ GenTraversable, GenTraversableLike }
+import scala.collection.generic.{ IsTraversableLike}
+import scala.collection.{ GenTraversableLike }
 
 class FoldableCollection[A, R <% GenTraversableLike[_,R]](val r: GenTraversableLike[A,R]) {
   def foldWith[S](fo: Foldl[A, S]): S = {

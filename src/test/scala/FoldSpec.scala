@@ -5,9 +5,7 @@ import fold._
 import Fold.{length => foldLength, _}
 import scala.collection.{Seq}
 import scalaz._
-import std.list._
 import std.string._
-import scala.math._
 
 class FoldSpecs extends Specification {
   import CanFold._
