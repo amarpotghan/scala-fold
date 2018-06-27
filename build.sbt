@@ -62,6 +62,12 @@ lazy val foldSettings = Seq(
 )
 
 val projectName = "fold"
+homepage := Some(url("https://github.com/amarpotghan/scala-fold"))
+
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/amarpotghan/scala-fold.git"),
+    "scm:git@github.com/amarpotghan/scala-fold.git"))
 
 lazy val root = (project in file(".")).
   settings(foldSettings: _*).
