@@ -107,3 +107,8 @@ res2: Double = 2.0
 
 
 Feedbacks welcome!
+
+# LICENSE
+
+Distributed under the [Apache 2.0](LICENSE).
+Copyright © 2016-2018 Amar Potghan.
