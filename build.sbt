@@ -9,7 +9,6 @@ publishTo in ThisBuild := Some {
     Opts.resolver.sonatypeStaging
 }
 publishArtifact in Test := false
-licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 
 lazy val foldlScalacOptions = Seq(
   "-deprecation",
